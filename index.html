@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sourcing Research · 银河电灯（銀河電燈 / Shiroki）</title>
+  <title>Sourcing Research · 银河电灯 / 第四境界</title>
   <style>
     :root {
       --bg: #f5f5f4;
@@ -12,6 +12,7 @@
       --muted: #57534e;
       --border: #d6d3d1;
       --accent: #1e3a5f;
+      --tab-active: #1e3a5f;
       --warn-bg: #fef3c7;
       --warn-border: #d97706;
       --warn-text: #78350f;
@@ -31,20 +32,41 @@
       background: var(--bg); color: var(--text);
       font-size: 17px; line-height: 1.7;
     }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 24px 20px 48px; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 24px 20px 48px; }
     header {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 20px 24px; margin-bottom: 20px;
+      border-radius: 10px; padding: 20px 24px; margin-bottom: 16px;
     }
     header .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
-    h1 { margin: 0; font-size: 1.75rem; line-height: 1.3; color: var(--accent); }
+    h1 { margin: 0; font-size: 1.65rem; line-height: 1.3; color: var(--accent); }
     .subtitle { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+    .tabs {
+      display: flex; gap: 0; margin-bottom: 18px;
+      border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+      background: var(--card);
+    }
+    .tabs button {
+      flex: 1; border: 0; background: transparent; padding: 14px 16px;
+      font-size: 16px; font-weight: 600; cursor: pointer; color: var(--muted);
+      font-family: inherit; border-bottom: 3px solid transparent;
+    }
+    .tabs button:hover { background: #fafaf9; color: var(--text); }
+    .tabs button.active {
+      color: var(--tab-active); background: #fff;
+      border-bottom-color: var(--tab-active);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
     .alert {
       background: var(--warn-bg); border: 2px solid var(--warn-border);
-      border-radius: 10px; padding: 16px 20px; margin-bottom: 24px;
+      border-radius: 10px; padding: 16px 20px; margin-bottom: 18px;
       color: var(--warn-text); font-weight: 600;
     }
     .alert strong { display: block; margin-bottom: 6px; font-size: 1.05rem; }
+    .alert.ok {
+      background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text);
+      font-weight: 500;
+    }
     section {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 10px; padding: 20px 24px; margin-bottom: 18px;
@@ -54,11 +76,12 @@
       padding-bottom: 8px; border-bottom: 2px solid var(--border);
     }
     h3 { margin: 18px 0 8px; font-size: 1.05rem; color: var(--text); }
+    h3:first-child { margin-top: 0; }
     p, li { margin: 0 0 10px; }
-    ul { padding-left: 1.35em; margin: 0 0 8px; }
+    ul, ol { padding-left: 1.35em; margin: 0 0 8px; }
     a { color: var(--link); word-break: break-all; }
     a:hover { text-decoration: underline; }
-    dl { margin: 0; display: grid; grid-template-columns: 7.5em 1fr; gap: 8px 12px; }
+    dl { margin: 0; display: grid; grid-template-columns: 8em 1fr; gap: 8px 12px; }
     dt { font-weight: 600; color: var(--muted); }
     dd { margin: 0; }
     table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0 12px; }
@@ -68,10 +91,6 @@
     }
     th { background: #f0f0ef; font-weight: 600; color: var(--accent); }
     tr:nth-child(even) td { background: #fafaf9; }
-    .tag {
-      display: inline-block; background: #e7e5e4; color: var(--muted);
-      font-size: 13px; padding: 2px 8px; border-radius: 4px; margin-right: 6px;
-    }
     .badge {
       display: inline-block; font-size: 12px; font-weight: 700;
       padding: 2px 8px; border-radius: 4px; margin-right: 6px; white-space: nowrap;
@@ -84,15 +103,33 @@
       padding: 12px 14px; margin-bottom: 10px; background: #fff;
     }
     .gap-item h4 { margin: 0 0 6px; font-size: 1rem; }
-    .sources a { display: block; margin-bottom: 6px; }
+    .tried {
+      font-size: 14px; color: var(--muted); background: var(--gap-bg);
+      border-left: 3px solid var(--border); padding: 8px 12px; margin: 8px 0;
+    }
+    .timeline { border-left: 3px solid var(--border); padding-left: 16px; margin: 8px 0 12px; }
+    .timeline .item { margin-bottom: 14px; position: relative; }
+    .timeline .item::before {
+      content: ""; position: absolute; left: -21px; top: 8px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border);
+    }
+    .timeline .when { font-weight: 700; color: var(--accent); font-size: 15px; }
+    .timeline .what { margin-top: 2px; }
+    .timeline .src { font-size: 13px; color: var(--muted); }
+    .person-card {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px; margin-bottom: 12px; background: #fff;
+    }
+    .person-card h4 { margin: 0 0 8px; font-size: 1.05rem; color: var(--accent); }
+    .sources li { margin-bottom: 4px; font-size: 14px; }
     footer { margin-top: 8px; font-size: 13px; color: var(--muted); text-align: center; }
-    nav.toc { font-size: 14px; margin-top: 10px; }
-    nav.toc a { margin-right: 12px; }
     @media (max-width: 560px) {
       body { font-size: 16px; }
       .wrap { padding: 16px 12px 40px; }
       header, section { padding: 16px; }
-      h1 { font-size: 1.4rem; }
+      h1 { font-size: 1.35rem; }
+      .tabs button { font-size: 14px; padding: 12px 8px; }
       dl { grid-template-columns: 1fr; gap: 2px 0; }
       dt { margin-top: 8px; }
       table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -102,296 +139,441 @@
 <body>
   <div class="wrap">
     <header>
-      <div class="meta">Sourcing Research · 更新日期 2026-10-10（联系方式深化版）</div>
-      <h1>银河电灯（銀河電燈 / Shiroki）</h1>
-      <p class="subtitle">Research for Sourcing · 组织 · 人物 · 联系方式 · 缺口闭合</p>
-      <nav class="toc">
-        <a href="#contacts">联系方式</a>
-        <a href="#gaps">缺口闭合</a>
-        <a href="#org">组织</a>
-        <a href="#products">产品</a>
-        <a href="#person">人物</a>
-        <a href="#sources">来源</a>
-      </nav>
+      <div class="meta">Sourcing Research · Research for Sourcing · 更新日期 2026-10-10（Asia/Taipei）</div>
+      <h1>银河电灯 / 第四境界</h1>
+      <p class="subtitle">双 tab 可切 · 公开资料汇总 · 人物履历与出处 · 缺口写明已试路径 · 不编造</p>
     </header>
 
-    <div class="alert" role="note">
-      <strong>重要纠正</strong>
-      公开资料里，「银河电灯」不是日本法人游戏公司，而是一位长期住在东京、用中文做网页解谜／轻量 ARG 的华人独立创作者品牌。日文写作「銀河電燈」，署名「银河电灯Shiroki」。若要找传统日企解谜工作室，目前对不上。
+    <div class="tabs" role="tablist">
+      <button type="button" class="active" role="tab" aria-selected="true" data-tab="ginga" id="tab-ginga">银河电灯 / Shiroki</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="d4kk" id="tab-d4kk">第四境界</button>
     </div>
 
-    <section id="contacts">
-      <h2>一、联系方式（深化捕捞）</h2>
-      <p>每条注明出处与可信度。商务优先：官方邮箱 + CONTACT 页说明；社媒私信为次选。</p>
-      <table>
-        <thead>
-          <tr>
-            <th>渠道</th>
-            <th>账号／地址</th>
-            <th>出处</th>
-            <th>可信度</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>邮件（首选）</strong></td>
-            <td><a href="mailto:ginga.light0902@gmail.com">ginga.light0902@gmail.com</a><br>官网 CONTACT 注明：网页来信咨询暂时停止，请直接发此邮箱。邮箱中 0902 与公开生日 9 月 2 日一致。</td>
-            <td><a href="https://ginga-light.top/connect.html" target="_blank" rel="noopener">ginga-light.top/connect.html</a>（Cloudflare 邮箱保护解码，源码 data-cfemail）</td>
-            <td>官网自述 · 高</td>
-          </tr>
-          <tr>
-            <td>官网 CONTACT／表单</td>
-            <td><a href="https://ginga-light.top/connect.html" target="_blank" rel="noopener">https://ginga-light.top/connect.html</a><br>表单仍存在，但页面红字提示暂停网页来信；后端曾走 <code>/api/send-email</code>。</td>
-            <td>同上</td>
-            <td>官网自述 · 高</td>
-          </tr>
-          <tr>
-            <td>微信公众号</td>
-            <td>「银河电灯Shiroki」；About 外链文章 <a href="https://mp.weixin.qq.com/s/WsJmv9Fw0Js5nOV3y0nNHA" target="_blank" rel="noopener">mp.weixin.qq.com/s/WsJmv9Fw0Js5nOV3y0nNHA</a><br>未发现公开个人微信号／企微二维码。</td>
-            <td>官网 About 图标链；公众号文章署名</td>
-            <td>官网自述 · 高</td>
-          </tr>
-          <tr>
-            <td>小红书</td>
-            <td>官网 About 官方外链：<a href="https://xhslink.com/m/IWsZQOsjXC" target="_blank" rel="noopener">xhslink.com/m/IWsZQOsjXC</a>（短链，可能需 App 打开）。三联等报道确认有小红书账号并曾发制作心得。</td>
-            <td>官网 About；三联生活周刊报道提及「银河电灯」小红书账号</td>
-            <td>官网自述 · 高（稳定 user/profile URL 未在公开网页写死）</td>
-          </tr>
-          <tr>
-            <td>X / Twitter</td>
-            <td><a href="https://x.com/shiroki404" target="_blank" rel="noopener">https://x.com/shiroki404</a></td>
-            <td>官网 About；Bangumi 外链</td>
-            <td>官网自述 · 高</td>
-          </tr>
-          <tr>
-            <td>微博</td>
-            <td><a href="https://weibo.com/u/2880430802" target="_blank" rel="noopener">https://weibo.com/u/2880430802</a>（銀河電燈__）<br>是否开放陌生人私信：公开页无法确认，需登录后试。</td>
-            <td>Bangumi；本人微博</td>
-            <td>平台资料 · 高</td>
-          </tr>
-          <tr>
-            <td>爱发电</td>
-            <td><a href="https://afdian.com/a/shiroki" target="_blank" rel="noopener">https://afdian.com/a/shiroki</a>（B 站简介亦写 ifdian.net/a/shiroki）<br>可打赏／平台内私信（平台能力，非独立邮箱）。</td>
-            <td>官网生态／本人爱发电开通帖；Bangumi</td>
-            <td>官网／本人 · 高</td>
-          </tr>
-          <tr>
-            <td>哔哩哔哩</td>
-            <td><a href="https://space.bilibili.com/1914870" target="_blank" rel="noopener">https://space.bilibili.com/1914870</a>（銀河電燈Shiroki；简介含爱发电）<br>勿与无关账号「汐洛琪SHIROKI」混淆。</td>
-            <td>Bangumi 外链；B 站搜索页</td>
-            <td>平台资料 · 高</td>
-          </tr>
-          <tr>
-            <td>TapTap</td>
-            <td>用户页 <a href="https://www.taptap.cn/user/488266213" target="_blank" rel="noopener">taptap.cn/user/488266213</a>；作品页如 <a href="https://www.taptap.cn/app/798053" target="_blank" rel="noopener">app/798053</a>（开发者／厂商：銀河電燈）</td>
-            <td>Bangumi；TapTap 作品页</td>
-            <td>平台资料 · 高</td>
-          </tr>
-          <tr>
-            <td>Bangumi</td>
-            <td><a href="https://bangumi.tv/person/99714" target="_blank" rel="noopener">https://bangumi.tv/person/99714</a></td>
-            <td>社区人物页</td>
-            <td>平台资料 · 中高</td>
-          </tr>
-          <tr>
-            <td>官网</td>
-            <td><a href="https://ginga-light.top/" target="_blank" rel="noopener">https://ginga-light.top/</a>（About／Works／Media／Contact）</td>
-            <td>—</td>
-            <td>官网自述 · 高</td>
-          </tr>
-          <tr>
-            <td>蒸汽平台（Steam 中国）</td>
-            <td><a href="https://my.steamchina.com/profiles/76561198146677110" target="_blank" rel="noopener">profiles/76561198146677110</a>（persona「银河电灯」）</td>
-            <td>公开资料检索；官网／Bangumi <strong>未</strong>挂此链</td>
-            <td>推断 · 中（仅昵称吻合，未官方背书）</td>
-          </tr>
-          <tr>
-            <td>域名／注册主体线索</td>
-            <td>ginga-light.top：注册商阿里云计算有限公司；注册 2026-02-27；NS Cloudflare；RDAP 注册人地区显示「he nan sheng」（河南省），姓名／邮箱脱敏。</td>
-            <td>RDAP <a href="https://rdap.org/domain/ginga-light.top" target="_blank" rel="noopener">rdap.org/domain/ginga-light.top</a></td>
-            <td>注册库公开字段 · 中高（主体姓名仍不可见）</td>
-          </tr>
-          <tr>
-            <td>ICP 备案主体</td>
-            <td>公开 API／抓取未返回可核验备案号；站点走 Cloudflare。工信部官网需人工验证码查询。</td>
-            <td>复核检索 2026-10-10</td>
-            <td>复核后仍公开不可见</td>
-          </tr>
-          <tr>
-            <td>公司总机／LinkedIn／Wantedly／GitHub／itch／Steam 商店页／抖音／Discord／LINE／Instagram</td>
-            <td>未发现可用公开入口</td>
-            <td>官网、Bangumi、媒体、检索复核</td>
-            <td>复核后仍公开不可见</td>
-          </tr>
-        </tbody>
-      </table>
-      <p><span class="tag">Sourcing 建议</span>商务／合作：直接写 <strong>ginga.light0902@gmail.com</strong>，并抄一份走微博／公众号／爱发电私信作备份。勿把游戏角色「戴远辰」当成真名。</p>
-    </section>
+    <!-- ========== TAB 1 ========== -->
+    <div class="tab-panel active" id="panel-ginga" role="tabpanel">
 
-    <section id="gaps">
-      <h2>二、缺口闭合（逐条）</h2>
-
-      <div class="gap-item">
-        <h4><span class="badge badge-gap">仍公开不可见</span>1. 真名与毕业院校</h4>
-        <p>真名、具体院校名均未在官网、访谈、平台资料出现。游戏《诡异广告》主角「戴远辰」为虚构角色，不可当作真名。仅知：男、生日 9 月 2 日、日语专业、自称纯文科／高考文科、非程序美术科班（虎嗅·游戏茶馆）。域名 RDAP 注册人地区为河南，与作品河南元素、媒体「中原」叙事一致，但不能反推姓名。</p>
+      <div class="alert">
+        <strong>纠偏</strong>
+        「银河电灯」不是日本法人游戏公司，而是长期住在东京、用中文做网页解谜 / 轻量 ARG（自称 WIG）的华人独立创作者品牌。日文写作「銀河電燈」，署名「银河电灯 Shiroki」。游戏角色「戴远辰」≠ 真名。
       </div>
 
-      <div class="gap-item">
-        <h4><span class="badge badge-partial">部分线索</span>2. 国内／日本雇主全称与职级</h4>
-        <p><strong>已坐实（自述）</strong>：国内某互联网游戏公司做中日对接商务 → 约 2022–2023 赴日（2025-10 访谈称约 2.5–3 年）→ 东京某游戏公司偏文书／文职，难碰游戏内核（硅星人、虎嗅）。<br><strong>仍不可见</strong>：国内／日本雇主全称、职级、部门。</p>
-      </div>
+      <section>
+        <h2>1. 组织与定位</h2>
+        <dl>
+          <dt>形态</dt><dd>个人创作者品牌；无公开可查的株式会社 / 合同会社 / 个体工商户公示</dd>
+          <dt>官网</dt><dd><a href="https://ginga-light.top/" target="_blank" rel="noopener">ginga-light.top</a></dd>
+          <dt>定位</dt><dd>轻量 ARG / 网页解谜（WIG）；面向中文玩家；灵感来自日本 ARG 团体「第四境界」与民间致敬作（含 SIM3 方向）</dd>
+          <dt>规模</dt><dd>1 人核心 + 项目制协作；无融资、无母公司、无招聘页</dd>
+          <dt>变现</dt><dd>游戏免费；爱发电打赏；对收费谨慎（访谈自述担心「AI 做的不值钱」标签）</dd>
+          <dt>域名线索</dt>
+          <dd>
+            <code>shiroki-y.top</code> 注册 2025-09-11（与首作上线接近）；
+            <code>ginga-light.top</code> 注册 2026-02-27。
+            阿里云 RDAP 注册人省份字段均为 <strong>河南省</strong>（姓名/地址已脱敏）。与访谈「老家河南菜」一致，但<strong>不能</strong>据此推定户籍或院校。
+            出处：阿里云 RDAP <code>whois.aliyun.com/rdap/domain/…</code>（2026-10-10 查询）。
+          </dd>
+        </dl>
+      </section>
 
-      <div class="gap-item">
-        <h4><span class="badge badge-gap">仍公开不可见</span>3. LinkedIn／Wantedly</h4>
-        <p>以「银河电灯」「Shiroki」「shiroki404」「ginga light」等关键词检索，未发现可归属本人的 LinkedIn 或 Wantedly 主页。</p>
-      </div>
+      <section>
+        <h2>2. 公开联系方式（触达）</h2>
+        <table>
+          <thead><tr><th>渠道</th><th>内容</th><th>可信度</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>邮件（首选商务）</td>
+              <td><a href="mailto:ginga.light0902@gmail.com">ginga.light0902@gmail.com</a><br>官网 CONTACT 写明：网页来信暂时停止，请直接发此邮箱。邮箱中 0902 与公开生日 9 月 2 日一致。</td>
+              <td><span class="badge badge-ok">官方</span></td>
+            </tr>
+            <tr>
+              <td>官网 CONTACT</td>
+              <td><a href="https://ginga-light.top/connect.html" target="_blank" rel="noopener">ginga-light.top/connect.html</a>（表单暂停）</td>
+              <td><span class="badge badge-ok">官方</span></td>
+            </tr>
+            <tr>
+              <td>微博</td>
+              <td><a href="https://weibo.com/u/2880430802" target="_blank" rel="noopener">weibo.com/u/2880430802</a></td>
+              <td><span class="badge badge-ok">官方链出</span></td>
+            </tr>
+            <tr>
+              <td>爱发电</td>
+              <td><a href="https://afdian.com/a/shiroki" target="_blank" rel="noopener">afdian.com/a/shiroki</a>（亦见 ifdian.net/a/shiroki）</td>
+              <td><span class="badge badge-ok">官方</span></td>
+            </tr>
+            <tr>
+              <td>公众号</td>
+              <td>「银河电灯Shiroki」</td>
+              <td><span class="badge badge-ok">自述/平台</span></td>
+            </tr>
+            <tr>
+              <td>小红书</td>
+              <td>「银河电灯」账号（爆款传播主阵地；具体 user id 以 App 内为准）</td>
+              <td><span class="badge badge-ok">本人运营</span></td>
+            </tr>
+            <tr>
+              <td>X / Twitter</td>
+              <td><a href="https://x.com/shiroki404" target="_blank" rel="noopener">@shiroki404</a></td>
+              <td><span class="badge badge-ok">Bangumi 链出</span></td>
+            </tr>
+            <tr>
+              <td>B 站</td>
+              <td><a href="https://space.bilibili.com/1914870" target="_blank" rel="noopener">space.bilibili.com/1914870</a></td>
+              <td><span class="badge badge-ok">Bangumi 链出</span></td>
+            </tr>
+            <tr>
+              <td>Bangumi</td>
+              <td><a href="https://bangumi.tv/person/99714" target="_blank" rel="noopener">person/99714</a>（生日 9 月 2 日）</td>
+              <td><span class="badge badge-ok">词条</span></td>
+            </tr>
+            <tr>
+              <td>TapTap</td>
+              <td>作品页可见；供应商字段见下文「上海创巴」</td>
+              <td><span class="badge badge-partial">平台</span></td>
+            </tr>
+            <tr>
+              <td>总机 / 商务页 / LinkedIn / Wantedly / GitHub 公开主页</td>
+              <td>复核后仍公开不可见</td>
+              <td><span class="badge badge-gap">无</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong>Sourcing 触达建议：</strong>优先写上述 Gmail，说明合作意向；同步可在微博 / 小红书 / 爱发电留痕。勿把「戴远辰」当真名开场。</p>
+      </section>
 
-      <div class="gap-item">
-        <h4><span class="badge badge-gap">仍公开不可见</span>4. 日本在留身份</h4>
-        <p>仅能确认「现住东京、在日游戏行业文职」类自述；签证类型、在留资格、永住／工作签等均无公开。</p>
-      </div>
+      <section>
+        <h2>3. 人物履历时间线（深挖版）</h2>
+        <p>主体：<strong>银河电灯 Shiroki</strong>（男；网名；真名未公开）。以下每条尽量带出处。学校全称、入学年、雇主全称与职级仍为公开缺口。</p>
 
-      <div class="gap-item">
-        <h4><span class="badge badge-partial">部分线索</span>5. 是否有法人实体</h4>
-        <p><strong>创作者侧</strong>：无公开可查的「银河电灯」株式会社／合同会社／个体工商户登记；形态为个人创作者品牌。<br><strong>域名</strong>：个人／脱敏注册，非公司名公示。<br><strong>仍不可见</strong>：日本／中国以本人真名开设的法人（无真名则无法交叉验证）。</p>
-      </div>
+        <div class="timeline">
+          <div class="item">
+            <div class="when">教育（本科前后）</div>
+            <div class="what">
+              自述：大学读<strong>日语专业</strong>；纯文科；高考也是文科。非程序 / 美术科班。
+              <span class="badge badge-partial">专业有源 · 校名无</span>
+            </div>
+            <div class="src">出处：游戏茶馆访谈（虎嗅转载 2026-03-10；游茶科技全文）：「大学学的日语…」「大学读的是日语专业，纯文科生，高考也是文科。」· AI新榜 2026-01-27：「完全不懂代码的文科生。」</div>
+          </div>
+          <div class="item">
+            <div class="when">家乡 / 地域线索</div>
+            <div class="what">
+              访谈称想介绍「家乡的河南菜」；游戏民俗围绕「运气」；饭店设定在北京外地店。域名 RDAP 注册人省 = 河南省（脱敏）。
+              <span class="badge badge-partial">河南关联强 · 非户籍证明</span>
+            </div>
+            <div class="src">出处：硅星人 2025-10-28；阿里云 RDAP 2026-10-10。</div>
+          </div>
+          <div class="item">
+            <div class="when">国内职业（赴日前）</div>
+            <div class="what">
+              「国内一家互联网游戏公司」做<strong>中日对接商务</strong>。雇主全称、城市、职级未公开。
+              <span class="badge badge-partial">职能有 · 公司名无</span>
+            </div>
+            <div class="src">出处：硅星人 2025-10-28；游戏茶馆：「毕业后在国内一家互联网游戏公司工作了一阵。」</div>
+          </div>
+          <div class="item">
+            <div class="when">赴日 · 约 2022–2023</div>
+            <div class="what">
+              2025-10 访谈：「差不多两年半到三年前来的」→ 推算约 2022 秋–2023 春前后抵日。在留资格 / 签证类型未公开。
+              <span class="badge badge-partial">时间窗可估 · 身份无</span>
+            </div>
+            <div class="src">出处：硅星人 2025-10-28。</div>
+          </div>
+          <div class="item">
+            <div class="when">日本职业（现）</div>
+            <div class="what">
+              东京某游戏公司，岗位偏<strong>文书 / 文职</strong>；「不太能接触到游戏内部」——自述为动手做游戏的动机之一。日企全称、职级未公开。
+              <span class="badge badge-partial">职能有 · 公司名无</span>
+            </div>
+            <div class="src">出处：游戏茶馆 / 硅星人。</div>
+          </div>
+          <div class="item">
+            <div class="when">创作动机 · 2024–2025</div>
+            <div class="what">
+              看到日本「第四境界」实体钱包系 ARG（「人の財布」等）实况后产生创作冲动；再玩到民间向第四境界致敬的作品后动手。自称无法做线下，改用网页解谜实现沉浸。
+            </div>
+            <div class="src">出处：硅星人；游戏茶馆；0.1KG 播客 EP38 时间轴提及第四境界与 SIM3。</div>
+          </div>
+          <div class="item">
+            <div class="when">2025-09-12 · 首作</div>
+            <div class="what">
+              《大学生登山失踪事件》上线；约 1 个月独立访问超 43 万；几乎一人 + AI（自称 AI 占比约 80–90%）；工具：豆包、Gemini、文心、DeepSeek 等。
+            </div>
+            <div class="src">出处：官网 Works / Media；新榜；游戏茶馆。</div>
+          </div>
+          <div class="item">
+            <div class="when">2025-11-27 · 二作</div>
+            <div class="what">
+              《诡异广告调查事件》；引入 Cursor / Copilot；协作 UI「狂饮可乐」；AI 占比约 60–70%。
+            </div>
+            <div class="src">出处：官网；游戏茶馆；新榜。</div>
+          </div>
+          <div class="item">
+            <div class="when">2026-03-24 · 三作</div>
+            <div class="what">《我淘到了一张背影全家福》网页作。</div>
+            <div class="src">出处：官网 Works；Bangumi。</div>
+          </div>
+          <div class="item">
+            <div class="when">2026-08-13 等 · 展演</div>
+            <div class="what">《非自愿摄入》艺术展向；另有 Weplay、游戏玩力场、游戏绿洲、外滩大会等参展记录（见官网 Media）。</div>
+            <div class="src">出处：ginga-light.top/media。</div>
+          </div>
+        </div>
 
-      <div class="gap-item">
-        <h4><span class="badge badge-partial">部分线索</span>6. 协作者「狂饮可乐」「春山」「环太」履历</h4>
-        <p><strong>狂饮可乐</strong>：二作 UI·图片·视频；作者访谈称其为女性 UI 设计师、推理爱好者，负责页面布局与 AI 生图提示词（虎嗅／游戏茶馆；TapTap／Bangumi Staff）。真名、教育、前雇主、个人主页仍公开不可见。<br><strong>春山、环太</strong>：二作「视频配音支持」；仅署名，无其他履历。</p>
-      </div>
-
-      <div class="gap-item">
-        <h4><span class="badge badge-ok">已坐实（关系边界）</span>7. TapTap「上海创巴科技有限公司」与创作者的法律关系</h4>
-        <p><strong>已坐实</strong>：</p>
+        <h3>身份标识（已交叉）</h3>
         <ul>
-          <li>TapTap《诡异广告调查事件》等页：开发者／厂商＝「銀河電燈」；字段「供应商」＝上海创巴科技有限公司。</li>
-          <li>上海创巴科技有限公司：统一社会信用代码 91310120MA1JJTQ8X9；法定代表人赵春丽；注册资本 100 万元；成立 2021-05-28；存续；地址上海市奉贤区肖塘路 255 弄 10 号 2 层；经营范围含软件开发、数字文化创意、互联网信息服务等；增值电信许可证沪 B2-20231470（信息服务业务·仅限互联网信息服务）。出处：<a href="https://www.51miit.com/details/eb4a0ad4d53f42eab5ffe794ab303040/" target="_blank" rel="noopener">51miit 许可证档案</a>。</li>
-          <li>同一「供应商」出现在大量无关 TapTap 游戏（如炽点《冒险小球》《恐龙世界》、上海哆咔工作室作品等），说明创巴是平台侧常见供应商／合规上架主体，而非「银河电灯」专属公司。</li>
+          <li>网名：银河电灯 / 銀河電燈；署名 Shiroki</li>
+          <li>生日：9 月 2 日（Bangumi；邮箱 0902）</li>
+          <li>性别：男（Bangumi；访谈）</li>
+          <li>ID 由来：取自歌名，联想到《银河铁道之夜》（旧版报告据自述；本轮未再找到独立原文，标为待再核）</li>
+          <li><strong>勿当真名：</strong>「戴远辰」=《诡异广告调查事件》主角，非作者</li>
         </ul>
-        <p><strong>结论</strong>：公开资料支持「发行／上架供应商关系」，不支持「创作者本人开办或控股创巴」。股权／合同细节仍公开不可见。</p>
+      </section>
+
+      <section>
+        <h2>4. 产品一览</h2>
+        <table>
+          <thead><tr><th>作品</th><th>上线</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>《大学生登山失踪事件》</td><td>2025-09-12</td><td>代表作；入口像「福安家常菜馆」· <a href="https://missing.shiroki-y.top/introduction.html" target="_blank" rel="noopener">玩</a></td></tr>
+            <tr><td>《诡异广告调查事件》</td><td>2025-11-27</td><td>假电视台站 · <a href="https://spectrum.shiroki-y2.top/webtimetower.html" target="_blank" rel="noopener">玩</a></td></tr>
+            <tr><td>《我淘到了一张背影全家福》</td><td>2026-03-24</td><td>后续网页作</td></tr>
+            <tr><td>《非自愿摄入》艺术展</td><td>2026-08-13</td><td>艺术展向</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>5. 协作者</h2>
+        <div class="person-card">
+          <h4>狂饮可乐</h4>
+          <p>二作 UI · 图片 · 视频。作者称其为 UI 设计师、推理爱好者；负责页面布局与 AI 生图提示词。真名 / 教育 / 前雇主：公开不可见。</p>
+          <p class="src" style="font-size:13px;color:var(--muted);margin:0">出处：游戏茶馆访谈。</p>
+        </div>
+        <div class="person-card">
+          <h4>春山、环太</h4>
+          <p>二作配音支持；仅署名，无公开履历。</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>6. 缺口闭合情况 + 已试路径</h2>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-gap">仍缺口</span> 真名</h4>
+          <p>无公开真名。「戴远辰」已排除（游戏角色）。</p>
+          <div class="tried">已试：官网 About/CONTACT；Bangumi；微博/B站/X 简介；GitHub code 搜 ginga.light0902、shiroki404（仅本仓镜像）；谁是谁式交叉未出。</div>
+        </div>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-gap">仍缺口</span> 毕业院校与入学年份</h4>
+          <p>仅知「日语专业 / 文科 / 高考文科」。校名、届别、是否赴日读研：无。</p>
+          <div class="tried">已试关键词交叉：银河电灯 / Shiroki / shiroki404 / ginga.light0902 ×（郑州大学、河南大学、河南师范、开封、洛阳、新乡、大阪大学、早稻田、北京大学等）— 无命中校名。日语专业河南高校名单无法反推。播客 0.1KG「中原」标题指向题材/地域氛围，非校名。</div>
+        </div>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-gap">仍缺口</span> 国内 / 日本雇主全称与职级</h4>
+          <p>仅「国内互联网游戏公司 · 中日对接商务」「东京游戏公司 · 文书文职」。</p>
+          <div class="tried">已试：Wantedly / Qiita / note.com / はてな / LinkedIn 公开检索（shiroki404、銀河電燈、ginga light）；无匹配职历页。硅星人、游戏茶馆、新榜、三联均未点名公司。</div>
+        </div>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-gap">仍缺口</span> LinkedIn / Wantedly / 日本在留身份</h4>
+          <div class="tried">已试：LinkedIn、Wantedly 搜 handle 与中日名变体；在留资格无任何访谈提及。</div>
+        </div>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-ok">已闭合</span> 上海创巴科技有限公司</h4>
+          <p>TapTap「供应商」字段出现「上海创巴」；核查为平台侧多游戏共用供应商主体（公开工商信息法人赵春丽），<strong>非</strong>创作者本人公司。法律关系 = 发行/上架服务类，非股权。</p>
+        </div>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-partial">部分</span> 是否有法人实体</h4>
+          <p>日本株式会社 / 中国个体户 / 工作室：公开渠道未见。域名以个人隐私注册（河南省），不构成公司登记证明。</p>
+        </div>
+
+        <div class="gap-item">
+          <h4><span class="badge badge-partial">部分</span> 协作者履历</h4>
+          <p>狂饮可乐：女 UI / 推理爱好者（访谈）。春山、环太：仅配音署名。</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>7. 主要来源</h2>
+        <ul class="sources">
+          <li><a href="https://ginga-light.top/about" target="_blank" rel="noopener">官网 About</a> · <a href="https://ginga-light.top/works" target="_blank" rel="noopener">Works</a> · <a href="https://ginga-light.top/media" target="_blank" rel="noopener">Media</a> · <a href="https://ginga-light.top/connect.html" target="_blank" rel="noopener">CONTACT</a></li>
+          <li><a href="https://bangumi.tv/person/99714" target="_blank" rel="noopener">Bangumi person/99714</a></li>
+          <li><a href="https://www.163.com/dy/article/KCUSU0U60511N33R.html" target="_blank" rel="noopener">硅星人 2025-10-28（网易转载）</a></li>
+          <li><a href="https://www.huxiu.com/article/4840798.html" target="_blank" rel="noopener">虎嗅 · 游戏茶馆 2026-03-10</a> · <a href="https://youxichaguan.com/archives/191364" target="_blank" rel="noopener">游茶科技全文</a></li>
+          <li><a href="https://newrank.cn/article/detail/33689" target="_blank" rel="noopener">AI新榜 2026-01-27</a></li>
+          <li><a href="https://www.lifeweek.com.cn/h5/article/detail.do?artId=256667" target="_blank" rel="noopener">三联生活周刊 2025-12-06</a></li>
+          <li>阿里云 RDAP：ginga-light.top / shiroki-y.top（河南省字段，2026-10-10）</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- ========== TAB 2 ========== -->
+    <div class="tab-panel" id="panel-d4kk" role="tabpanel">
+
+      <div class="alert ok">
+        <strong>与银河电灯的关系（一句）</strong>
+        Shiroki 自述灵感来自第四境界（尤其「人の財布」类实体侵入体验）及民间致敬作；他做的是面向中文玩家的轻量网页 WIG，并非第四境界成员或日方授权衍生。
       </div>
-    </section>
 
-    <section id="org">
-      <h2>三、组织</h2>
-      <dl>
-        <dt>名称</dt>
-        <dd>中文「银河电灯」；日文「銀河電燈」；署名「银河电灯Shiroki」</dd>
-        <dt>形态</dt>
-        <dd>个人创作者品牌；无公开可查的株式会社／合同会社</dd>
-        <dt>定位</dt>
-        <dd>轻量 ARG／网页解谜（自称 WIG），面向中文玩家；灵感来自日本 ARG 团体「第四境界」</dd>
-        <dt>规模</dt>
-        <dd>1 人核心 + 项目制协作；无融资、无母公司、无招聘页</dd>
-        <dt>变现</dt>
-        <dd>游戏免费，爱发电打赏；对收费谨慎</dd>
-        <dt>域名</dt>
-        <dd>ginga-light.top（阿里云注册、Cloudflare DNS；RDAP 地区河南）</dd>
-      </dl>
-    </section>
+      <section>
+        <h2>1. 这是什么</h2>
+        <dl>
+          <dt>形态</dt>
+          <dd>ARG 品牌 / クリエイター集団（代号氛围 D4KK）；不是单一株式会社。制作侧 <strong>株式会社ストーリーノート（Story Note）</strong> + 制作/宣传 <strong>株式会社マレ（Mare）</strong> 的联盟。藤澤仁称其为从 Team Project:;COLD 长出的「アライアンス」。</dd>
+          <dt>亮相</dt>
+          <dd>2024-03-31 在 Project:;COLD 2.0 完结クレジット中公开「第四境界」名称；次日公开《かがみの特殊少年更生施設》。</dd>
+          <dt>前身</dt>
+          <dd>Team Project:;COLD（2020–）：《Project:;COLD》系列；CEDEC AWARDS 2022 游戏设计优秀赏。</dd>
+          <dt>定位</dt>
+          <dd>自称「日常侵蝕ゲーム」；跨 Web / X / YouTube / Discord / LINE / 邮件 / 实体物。</dd>
+          <dt>官网</dt>
+          <dd><a href="https://www.daiyonkyokai.net/" target="_blank" rel="noopener">daiyonkyokai.net</a> · 店 <a href="https://shop.daiyonkyokai.net/" target="_blank" rel="noopener">shop.daiyonkyokai.net</a> · X @daiyonkyokai</dd>
+        </dl>
 
-    <section id="products">
-      <h2>四、产品</h2>
-      <table>
-        <thead>
-          <tr><th>作品</th><th>上线</th><th>说明／入口</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>《大学生登山失踪事件》</td>
-            <td>2025-09-12</td>
-            <td>代表作。<a href="https://missing.shiroki-y.top/introduction.html" target="_blank" rel="noopener">玩</a></td>
-          </tr>
-          <tr>
-            <td>《诡异广告调查事件》</td>
-            <td>2025-11-27</td>
-            <td>假电视台站。<a href="https://spectrum.shiroki-y2.top/webtimetower.html" target="_blank" rel="noopener">玩</a></td>
-          </tr>
-          <tr>
-            <td>《我淘到了一张背影全家福》</td>
-            <td>2026-03-24</td>
-            <td>后续网页作</td>
-          </tr>
-          <tr>
-            <td>《非自愿摄入》艺术展</td>
-            <td>2026-08-13</td>
-            <td>艺术展向</td>
-          </tr>
-          <tr>
-            <td>《大家一起来填字！》等小说</td>
-            <td>2026 起</td>
-            <td>官网 Works「MY NOVELS」</td>
-          </tr>
-        </tbody>
-      </table>
-      <h3>反响（公开自述／报道）</h3>
-      <ul>
-        <li>首作约 1 个月独立访问超 43 万</li>
-        <li>小红书相关互动约 40 万</li>
-        <li>用户画像自称女性约八成</li>
-        <li>评价两极：日常裂痕式恐怖、摸鱼友好；也有人嫌引导弱、谜偏猜、AI 图劝退</li>
-        <li>近期有 Weplay、游戏玩力场、游戏绿洲、外滩大会等参展记录</li>
-      </ul>
-    </section>
+        <h3>代表作（节选）</h3>
+        <ul>
+          <li>《Project:;COLD》系列（2020–2024）— 不可逆 SNS 悬疑；CEDEC 2022</li>
+          <li>「人の」系列：《人の財布》（2023-10 起，实体钱包推理，初回即售罄；报道累销数万级）、《人の給与明細》《人の交換日記》《人のカレンダー》等</li>
+          <li>《かがみの特殊少年更生施設》（2024-04；假少年院 Web 检索；入口 <a href="https://kagamino-jrep.net/" target="_blank" rel="noopener">kagamino-jrep.net</a>；2026-04 官方称访问约 1 亿、玩家约 150 万）</li>
+          <li>幽拐系列、残置物展、Ds 试验、东京侵蝕、与 Konami《SILENT HILL》等合作</li>
+          <li>D4KK GUEST ARG（2025-12 起）：独立 ARG 刊登平台</li>
+        </ul>
 
-    <section id="person">
-      <h2>五、核心人物：银河电灯 Shiroki</h2>
-      <p>公开履历全来自本人访谈与自述。<strong>无真名、无具体学校名、无具体雇主公司名。</strong></p>
-      <dl>
-        <dt>身份</dt>
-        <dd>男；生日 9 月 2 日；网名「银河电灯」；署名 Shiroki；X @shiroki404</dd>
-        <dt>教育</dt>
-        <dd>日语专业；自称纯文科、高考文科；非程序／美术科班（虎嗅·游戏茶馆 2026-03-10）</dd>
-        <dt>职业路径</dt>
-        <dd>国内某互联网游戏公司做中日对接商务 → 约 2022–2023 赴日 → 东京某游戏公司偏文书／文职，难碰游戏内核——自述这是动手做游戏的动机之一</dd>
-        <dt>制作</dt>
-        <dd>剧本、谜题、程序主导；首作几乎一人 + AI（自称约 80–90%），二作约 60–70%；工具含豆包、Gemini、文心、DeepSeek、后用 Cursor／Copilot</dd>
-        <dt>商业立场</dt>
-        <dd>坚持免费；开爱发电；担心「AI 做的不值钱」标签</dd>
-        <dt>ID 由来</dt>
-        <dd>取自歌名，联想到《银河铁道之夜》，觉得「银河电灯」意象更好</dd>
-      </dl>
-      <h3>访谈出处</h3>
-      <ul>
-        <li>虎嗅：<a href="https://www.huxiu.com/article/4840798.html" target="_blank" rel="noopener">https://www.huxiu.com/article/4840798.html</a></li>
-        <li>硅星人：<a href="https://www.163.com/dy/article/KCUSU0U60511N33R.html" target="_blank" rel="noopener">https://www.163.com/dy/article/KCUSU0U60511N33R.html</a></li>
-        <li>新榜：<a href="https://newrank.cn/article/detail/33689" target="_blank" rel="noopener">https://newrank.cn/article/detail/33689</a></li>
-      </ul>
-      <h3>协作（非合伙人）</h3>
-      <ul>
-        <li><strong>狂饮可乐</strong>：二作 UI·图片·视频；作者称其为 UI 设计师、推理爱好者（女性）。真名／教育／前雇主未公开。</li>
-        <li><strong>春山、环太</strong>：二作配音支持；仅署名，无履历。</li>
-      </ul>
-    </section>
+        <h3>商业模式</h3>
+        <ul>
+          <li><strong>包装型：</strong>卖实体商品包（钱包、明细、日历等）→ 打开即进入叙事</li>
+          <li><strong>IP 型：</strong>免费 Web 拉粉 → 册子 / 漫画 / 活动变现（《かがみの》路径）</li>
+          <li>展会、日テレ共同品牌「4x4 sect.」、嘉宾 ARG 平台、大 IP 合作</li>
+        </ul>
+        <p>出处：日文维基「第四境界」；Forbes JAPAN 2026-03；Story Note / Mare 官网；藤澤 note。</p>
+      </section>
 
-    <section id="sourcing">
-      <h2>六、Sourcing 一句话</h2>
-      <p>可接触对象是人设清晰、媒体曝光充分的中文独立作者 Shiroki（东京游戏行业文职背景 + 日语专业），不是日本解谜大厂。<strong>邮件 ginga.light0902@gmail.com 已坐实为官网公开触达</strong>；辅以微博／公众号／爱发电／小红书／X。公司总机、LinkedIn、Wantedly、GitHub、企微仍公开不可见。</p>
-    </section>
+      <section>
+        <h2>2. 核心人物履历（+ 出处）</h2>
 
-    <section id="sources" class="sources">
-      <h2>七、主要来源</h2>
-      <a href="https://ginga-light.top/connect.html" target="_blank" rel="noopener">官网 CONTACT（含邮箱）— https://ginga-light.top/connect.html</a>
-      <a href="https://ginga-light.top/about.html" target="_blank" rel="noopener">官网 About（社媒图标）— https://ginga-light.top/about.html</a>
-      <a href="https://ginga-light.top/works" target="_blank" rel="noopener">官网 Works — https://ginga-light.top/works</a>
-      <a href="https://ginga-light.top/media" target="_blank" rel="noopener">官网 Media — https://ginga-light.top/media</a>
-      <a href="https://bangumi.tv/person/99714" target="_blank" rel="noopener">Bangumi — https://bangumi.tv/person/99714</a>
-      <a href="https://www.taptap.cn/app/798053" target="_blank" rel="noopener">TapTap Staff／供应商 — https://www.taptap.cn/app/798053</a>
-      <a href="https://www.51miit.com/details/eb4a0ad4d53f42eab5ffe794ab303040/" target="_blank" rel="noopener">上海创巴科技许可证档案 — 51miit</a>
-      <a href="https://rdap.org/domain/ginga-light.top" target="_blank" rel="noopener">域名 RDAP — ginga-light.top</a>
-      <a href="https://www.huxiu.com/article/4840798.html" target="_blank" rel="noopener">虎嗅／游戏茶馆访谈</a>
-      <a href="https://www.163.com/dy/article/KCUSU0U60511N33R.html" target="_blank" rel="noopener">硅星人访谈</a>
-      <a href="https://newrank.cn/article/detail/33689" target="_blank" rel="noopener">新榜对话</a>
-      <a href="https://space.bilibili.com/1914870" target="_blank" rel="noopener">B 站 — space.bilibili.com/1914870</a>
-      <a href="https://x.com/shiroki404" target="_blank" rel="noopener">X — @shiroki404</a>
-      <a href="https://weibo.com/u/2880430802" target="_blank" rel="noopener">微博 — u/2880430802</a>
-      <a href="https://afdian.com/a/shiroki" target="_blank" rel="noopener">爱发电 — afdian.com/a/shiroki</a>
-    </section>
+        <div class="person-card">
+          <h4>藤澤 仁（ふじさわ じん）— 总监督 / Story Note 代表</h4>
+          <ul>
+            <li>生：1970-12，神奈川县</li>
+            <li>教育：<strong>情報科学専門学校</strong>毕业</li>
+            <li>早年：系统工程师 → 1998 起任堀井雄二助手参与《ドラゴンクエスト》剧本</li>
+            <li>Square Enix：DQVII–X 等；《DQIX》导演；《DQX》Ver.1 导演 / 剧本；《予言者育成学園》P/D</li>
+            <li>2018-04：离开 SE（推特公开）；短驻 FromSoftware 做实验项目 → MIXI「次世代エンタメ室」室长</li>
+            <li>2018-04：设 <strong>株式会社ストーリーノート</strong> 并任代表（东京都涩谷区；2026-04 员工约 33+4）</li>
+            <li>2019：小说《夏の呼吸》；2020：Project:;COLD 总监督；2024：第四境界总监督</li>
+          </ul>
+          <p style="font-size:13px;color:var(--muted);margin:0">出处：<a href="https://ja.wikipedia.org/wiki/%E8%97%A4%E6%BE%A4%E4%BB%81" target="_blank" rel="noopener">日文维基「藤澤仁」</a> · <a href="https://storynote.jp/about/" target="_blank" rel="noopener">Story Note About</a> · 电ファミ / ファミ通报道 · 本人 note</p>
+        </div>
+
+        <div class="person-card">
+          <h4>平 信一 — プロデューサー / 株式会社マレ 代表 · 电ファミ编辑长</h4>
+          <ul>
+            <li>4Gamer.net 初期成员，后至副编辑长；对谈策划等</li>
+            <li>电ファミニコゲーマー创刊后任编辑长（原ドワンゴ伞下）</li>
+            <li>2019-06-11：设 <strong>株式会社マレ</strong>（川崎市中原区；资本金 1000 万日元；代表取缔役）；同年ドワンゴ事业整理后电ファミ移管至 Mare</li>
+            <li>现：Mare 社长 + 电ファミ编辑长；第四境界侧负责制作 / 宣传（与 Story Note 分工）</li>
+          </ul>
+          <p style="font-size:13px;color:var(--muted);margin:0">出处：<a href="https://mare-inc.net/about/" target="_blank" rel="noopener">Mare 会社概要</a> · ITmedia 2019 独立报道 · Unity Learning 讲者页</p>
+        </div>
+
+        <div class="person-card">
+          <h4>西尾 英子 — Story Note · ARG / シナリオ</h4>
+          <ul>
+            <li>前 Square Enix：在藤澤手下做 DQ 系列剧本；项目中途离职，自述未写完为心结</li>
+            <li>2021 入社 Story Note シナリオ事业部</li>
+            <li>入社后完成《ドラゴンクエストモンスターズ３》剧本；现 ARG 项目整体进行管理、文本、难度调整（《かがみの》相关）</li>
+          </ul>
+          <p style="font-size:13px;color:var(--muted);margin:0">出处：<a href="https://storynote.jp/recruit/interview-6/" target="_blank" rel="noopener">Story Note 社员インタビュー</a></p>
+        </div>
+
+        <div class="person-card">
+          <h4>クリモトコウダイ — 第四境界 P / 电ファミ编辑部</h4>
+          <ul>
+            <li>电ファミニコゲーマー编辑部所属；foriio 自述「新闻配達中被卡车撞到」为转行编辑契机（非正式履历彩蛋式自述）</li>
+            <li>映像系 PM / Coordinator；参与 Project:;COLD case.613（2020）</li>
+            <li>《かがみの》P；《东京侵蝕2025》综合 P；《人のカレンダー》P 等</li>
+            <li>教育 / 入行前正式职历：公开不足</li>
+          </ul>
+          <p style="font-size:13px;color:var(--muted);margin:0">出处：<a href="https://www.foriio.com/edkoudai" target="_blank" rel="noopener">foriio</a> · <a href="https://eizo100.jp/directory/%e3%82%af%e3%83%aa%e3%83%a2%e3%83%88%e3%82%b3%e3%82%a6%e3%83%80%e3%82%a4" target="_blank" rel="noopener">映像作家100人</a> · Story Note Works 署名</p>
+        </div>
+
+        <div class="person-card">
+          <h4>安藤 房枝 — Story Note · マンガ / ARG 制作</h4>
+          <ul>
+            <li>Story Note 侧；《かがみの》マンガ部门等相关署名</li>
+            <li>后续新章等项目中有监督补 / 时系列监修类角色（Works 页）</li>
+            <li>完整教育与前雇主：公开较薄</li>
+          </ul>
+          <p style="font-size:13px;color:var(--muted);margin:0">出处：Story Note Works（かがみの / 少年の声… 等）</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>3. 市场位置（日本体验型谜解 vs ARG）</h2>
+        <ul>
+          <li><strong>体验型谜解大盘：</strong>IGDA 日本 SIG 体验型エンタメ调查 — 脱出等行业 2025 年约 <strong>101.5 亿日元</strong>（首次破 100 亿；口径 2024 起调整，勿与更早年份简单对比）。龙头 <strong>SCRAP / リアル脱出ゲーム</strong>。</li>
+          <li><strong>SCRAP · 加藤隆生：</strong>1974-09-14 生；岐阜生 / 京都长大；京都市立堀川高校 → 同志社大学心理学部；印刷会社约 1.5 年 → 乐队 / 自由撰稿 → 2004 创刊フリーペーパー SCRAP → 2007 初办 REG → 2008 设株式会社 SCRAP。出处：日文维基「加藤隆生」；文藝春秋 PLUS；本人 note。</li>
+          <li><strong>ARG 窄赛道：</strong>长期偏实验 / 活动向；近年由第四境界证明「包装型 + IP 型」可商业化。课题是「第四境界以外」能否复制生意。</li>
+          <li><strong>可比：</strong>SIM3（<a href="https://www.sim3.net/" target="_blank" rel="noopener">sim3.net</a>，独立 ARG 单元，代表「SIMさん」真名未公开；部分作品与 D4KK 生态有交集）· イマーシブシアター / マーダーミステリー / 街歩き谜。</li>
+          <li><strong>中文圈 WIG：</strong>银河电灯 2025-09 引爆小红书；免费 + 打赏为主，商业化弱于日本包装型 ARG。发现站例：谜页集。</li>
+          <li><strong>奖项节点：</strong>CEDEC 2022（Project:;COLD）· CEDEC 2025 游戏设计优秀赏（第四境界品牌）。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. Sourcing 一句话</h2>
+        <p>公司级合作找 <strong>Mare（平信一）/ Story Note（藤澤仁）</strong>；独立潮监测看 D4KK GUEST ARG 与 SIM3；中文对标人物是 <strong>Shiroki</strong>（触达见 Tab 1 邮件）。</p>
+      </section>
+
+      <section>
+        <h2>5. 主要来源</h2>
+        <ul class="sources">
+          <li><a href="https://ja.wikipedia.org/wiki/%E7%AC%AC%E5%9B%9B%E5%A2%83%E7%95%8C" target="_blank" rel="noopener">日文维基「第四境界」</a></li>
+          <li><a href="https://ja.wikipedia.org/wiki/%E8%97%A4%E6%BE%A4%E4%BB%81" target="_blank" rel="noopener">日文维基「藤澤仁」</a></li>
+          <li><a href="https://storynote.jp/about/" target="_blank" rel="noopener">Story Note About</a> · <a href="https://storynote.jp/recruit/interview-6/" target="_blank" rel="noopener">西尾访谈</a></li>
+          <li><a href="https://mare-inc.net/about/" target="_blank" rel="noopener">Mare 会社概要</a></li>
+          <li><a href="https://www.daiyonkyokai.net/" target="_blank" rel="noopener">第四境界官网</a></li>
+          <li><a href="https://note.com/jin_fujisawa/n/nb8472a6ea09b" target="_blank" rel="noopener">藤澤 note：第四境界の描いた『点と線』</a></li>
+          <li><a href="https://note.com/sig_immersive/n/n27168fd18f16" target="_blank" rel="noopener">体验型エンタメ 2026（IGDA SIG 口径）</a></li>
+          <li><a href="https://ja.wikipedia.org/wiki/%E5%8A%A0%E8%97%A4%E9%9A%86%E7%94%9F" target="_blank" rel="noopener">日文维基「加藤隆生」</a></li>
+        </ul>
+      </section>
+    </div>
 
     <footer>
-      Sourcing Research · 银河电灯 · 2026-10-10 深化版 · 仅汇总公开资料，未编造未公开信息
+      Sourcing Research · 仅公开资料 · 2026-10-10 更新 ·
+      <a href="https://psylch.github.io/sourcing-ginga-light/">psylch.github.io/sourcing-ginga-light</a>
     </footer>
   </div>
+
+  <script>
+    (function () {
+      var buttons = document.querySelectorAll('.tabs button');
+      var panels = {
+        ginga: document.getElementById('panel-ginga'),
+        d4kk: document.getElementById('panel-d4kk')
+      };
+      function activate(name) {
+        buttons.forEach(function (b) {
+          var on = b.getAttribute('data-tab') === name;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(panels).forEach(function (k) {
+          panels[k].classList.toggle('active', k === name);
+        });
+        try { history.replaceState(null, '', '#' + name); } catch (e) {}
+      }
+      buttons.forEach(function (b) {
+        b.addEventListener('click', function () { activate(b.getAttribute('data-tab')); });
+      });
+      var hash = (location.hash || '').replace(/^#/, '');
+      if (hash === 'd4kk' || hash === '第四境界') activate('d4kk');
+      else activate('ginga');
+    })();
+  </script>
 </body>
 </html>
